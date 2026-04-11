@@ -1,0 +1,306 @@
+/* ============================================================
+   SCAN.CSS — Kiosk Display, Navy Background, Big & Clear
+   ============================================================ */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ========================
+   FULL PAGE — Navy gradient background
+   ======================== */
+.scan-page {
+  min-height: 100vh;
+  width: 100%;
+  background: linear-gradient(145deg, #0d2347 0%, #1a3c6e 55%, #0f2d5a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', system-ui, sans-serif;
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Faint dot pattern for texture */
+.scan-page::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* Top accent line */
+.scan-page::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #4a9eff 0%, #60c9ff 50%, #4a9eff 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 0%; }
+  50%       { background-position: 100% 0%; }
+}
+
+/* ========================
+   KIOSK CARD — Glass on navy
+   ======================== */
+.scan-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 64px 80px;
+  width: 100%;
+  max-width: 860px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  backdrop-filter: blur(16px);
+  animation: cardIn 0.45s ease;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================
+   BACK BUTTON
+   ======================== */
+.scan-back-btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 10;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'Inter', system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.scan-back-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(74, 158, 255, 0.25);
+  transform: translateX(-4px);
+}
+
+.scan-back-btn:active {
+  transform: translateX(-4px) scale(0.95);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.scan-back-btn svg {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.scan-back-btn:hover svg {
+  transform: translateX(-2px);
+}
+
+/* ========================
+   HEADER
+   ======================== */
+.scan-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.scan-icon {
+  font-size: 72px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+.scan-title {
+  font-size: 44px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+}
+
+.scan-subtitle {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 400;
+}
+
+/* Divider */
+.scan-divider {
+  width: 100%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ========================
+   INPUT WRAPPER — with breathing glow
+   ======================== */
+.scan-input-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+}
+
+/* Outer breathing ring */
+.scan-input-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -5px;
+  border-radius: 20px;
+  border: 2px solid rgba(74, 158, 255, 0.5);
+  animation: breathe 2s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.3;
+    box-shadow: 0 0 0px  rgba(74,158,255, 0);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    box-shadow: 0 0 28px rgba(74,158,255, 0.4);
+    transform: scale(1.008);
+  }
+}
+
+/* ========================
+   INPUT — Big, white on dark
+   ======================== */
+.scan-input {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  padding: 26px 32px;
+  font-size: 34px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 700;
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: 16px;
+  outline: none;
+  text-align: center;
+  color: #ffffff !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  letter-spacing: 4px;
+  caret-color: #4a9eff;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-autofill-color: #ffffff;
+  -webkit-autofill-background: rgba(0, 0, 0, 0.6);
+}
+
+.scan-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 20px;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.scan-input:focus {
+  border-color: #4a9eff;
+  background: rgba(0, 0, 0, 0.7) !important;
+  box-shadow: 0 0 0 5px rgba(74, 158, 255, 0.18);
+  color: #ffffff !important;
+}
+
+/* Fix autofill styling */
+.scan-input:-webkit-autofill,
+.scan-input:-webkit-autofill:hover,
+.scan-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 5px rgba(0, 0, 0, 0.6) inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.scan-input:-webkit-autofill::first-line {
+  font-size: 34px;
+  color: #ffffff;
+}
+
+/* Hint */
+.scan-hint {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.35);
+  text-align: center;
+  margin-top: -16px;
+  font-weight: 500;
+}
+
+/* ========================
+   RESULT MESSAGE
+   ======================== */
+.scan-message {
+  width: 100%;
+  padding: 22px 32px;
+  border-radius: 14px;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  letter-spacing: 0.2px;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.scan-message.success {
+  background: rgba(74, 222, 128, 0.15);
+  color: #4ade80;
+  border: 1.5px solid rgba(74, 222, 128, 0.35);
+}
+
+.scan-message.error {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+  border: 1.5px solid rgba(248, 113, 113, 0.35);
+}
+
+/* ========================
+   FOOTER
+   ======================== */
+.scan-footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 20px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.25);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .scan-card { padding: 40px 24px; gap: 28px; }
+  .scan-title { font-size: 28px; }
+  .scan-input { font-size: 22px; padding: 18px 16px; }
+  .scan-message { font-size: 16px; }
+}
