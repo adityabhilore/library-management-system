@@ -16,7 +16,7 @@ function SettingsPage() {
   // Load admin profile
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/admin/profile")
+      .get("https://library-management-system-Isn2.onrender.com/admin/profile")
       .then((res) => {
         setUsername(res.data.username);
         setRole(res.data.role);
@@ -38,7 +38,7 @@ function SettingsPage() {
     setLoading(true);
     try {
       const res = await axios.put(
-        "http://127.0.0.1:8000/admin/update-profile",
+        "https://library-management-system-Isn2.onrender.com/admin/update-profile",
         {
           username: username,
           old_password: oldPassword,

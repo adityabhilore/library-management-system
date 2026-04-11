@@ -56,7 +56,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/admin/members/${r}`,
+        `https://library-management-system-Isn2.onrender.com/admin/members/${r}`,
         {
           params: {
             page: p,
@@ -80,7 +80,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.get(
-        `http://127.0.0.1:8000/admin/members/filters/${r}`
+        `https://library-management-system-Isn2.onrender.com/admin/members/filters/${r}`
       );
       setFilterOptions(res.data);
     } catch {
@@ -143,7 +143,7 @@ export default function MembersPage() {
 
     try {
       await axios.post(
-        "http://127.0.0.1:8000/admin/members/add",
+        "https://library-management-system-Isn2.onrender.com/admin/members/add",
         fd
       );
 
@@ -217,7 +217,7 @@ export default function MembersPage() {
 
     try {
       await axios.put(
-        "http://127.0.0.1:8000/admin/members/update",
+        "https://library-management-system-Isn2.onrender.com/admin/members/update",
         fd
       );
       alert("Updated successfully");
@@ -233,7 +233,7 @@ export default function MembersPage() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete("http://127.0.0.1:8000/admin/members/delete", {
+      await axios.delete("https://library-management-system-Isn2.onrender.com/admin/members/delete", {
         params: {
           member_id: id,
           role: role
@@ -268,7 +268,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.post(
-        "http://127.0.0.1:8000/admin/members/upload",
+        "https://library-management-system-Isn2.onrender.com/admin/members/upload",
         fd
       );
 

@@ -71,7 +71,7 @@ const [batches, setBatches] = useState([]);
       params.department = filtersToUse.department;
     }
 
-    const res = await axios.get("http://127.0.0.1:8000/admin/logs", { params });
+    const res = await axios.get("https://library-management-system-Isn2.onrender.com/admin/logs", { params });
 
     // 🔁 map backend response → UI expected structure
     const mappedLogs = (res.data.data || []).map((log) => {
@@ -133,7 +133,7 @@ const [batches, setBatches] = useState([]);
 
   const fetchDepartments = async () => {
   try {
-    const res = await axios.get("http://127.0.0.1:8000/admin/logs/departments");
+    const res = await axios.get("https://library-management-system-Isn2.onrender.com/admin/logs/departments");
     setDepartments(res.data || []);
   } catch (err) {
     console.error("Failed to load departments");
@@ -147,7 +147,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchDepartments = async () => {
     const res = await axios.get(
-      "http://127.0.0.1:8000/admin/logs/departments/by-role",
+      "https://library-management-system-Isn2.onrender.com/admin/logs/departments/by-role",
       { params: { role: filters.role } }
     );
     setDepartments(res.data || []);
@@ -158,7 +158,7 @@ useEffect(() => {
 
 useEffect(() => {
   axios
-    .get("http://127.0.0.1:8000/admin/logs/students/meta")
+    .get("https://library-management-system-Isn2.onrender.com/admin/logs/students/meta")
     .then((res) => {
       setYears(res.data.years || []);
       setDivisions(res.data.divisions || []);
@@ -186,7 +186,7 @@ const exportLogs = async () => {
     }
 
     const res = await axios.get(
-      "http://127.0.0.1:8000/admin/logs/export",
+      "https://library-management-system-Isn2.onrender.com/admin/logs/export",
       {
         params,
         responseType: "blob",

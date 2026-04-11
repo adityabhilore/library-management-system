@@ -6,7 +6,7 @@ import { FaSun, FaMoon, FaPlus, FaUpload } from "react-icons/fa";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const ROWS_PER_PAGE = 10;
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://library-management-system-Isn2.onrender.com";
 
 export default function TimetablePage() {
   const [day, setDay] = useState("Monday");
