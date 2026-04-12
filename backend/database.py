@@ -17,6 +17,7 @@ def get_db_connection():
             db_password = parsed.password
             db_port = parsed.port or 3306
             db_name = parsed.path.lstrip('/')
+            print(f"✅ Using DATABASE_URL: {db_host}:{db_port}/{db_name}")
         else:
             # Fallback to individual environment variables
             db_host = os.getenv("DB_HOST", "127.0.0.1")
@@ -24,6 +25,7 @@ def get_db_connection():
             db_password = os.getenv("DB_PASSWORD", "Aditya@2004")
             db_name = os.getenv("DB_NAME", "library_access")
             db_port = int(os.getenv("DB_PORT", "3306"))
+            print(f"✅ Using env vars: {db_host}:{db_port}/{db_name}")
         
         conn = mysql.connector.connect(
             host=db_host,
@@ -38,9 +40,8 @@ def get_db_connection():
         print(f"✅ MySQL Connected Successfully to {db_host}:{db_port}/{db_name}")
         return conn
     except mysql.connector.Error as e:
-        print("⚠️  MySQL Connection Warning:", str(e)[:100])
-        print("💡 Running in demo mode - database unavailable")
-        return None
+        print(f"❌ MySQL Connection Error: {str(e)}")
+        raise Exception(f"Failed to connect to database: {str(e)}")
 
 
 
