@@ -60,7 +60,7 @@ function Dashboard() {
   const loadMemberChart = async (filters = {}) => {
     try {
       const res = await axios.get(
-        "https://library-management-system-Isn2.onrender.com/admin/charts/members",
+        "https://library-management-system-fsn2.onrender.com/admin/charts/members",
         { params: filters }
       );
       setMemberPie(res.data?.length ? res.data : [{ name: "No Data", value: 0 }]);
@@ -72,7 +72,7 @@ function Dashboard() {
   const loadDepartmentBarChart = async (filters = {}) => {
   try {
     const res = await axios.get(
-      "https://library-management-system-Isn2.onrender.com/admin/charts/department-wise",
+      "https://library-management-system-fsn2.onrender.com/admin/charts/department-wise",
       { params: filters }
     );
     setDeptBarData(res.data);
@@ -85,7 +85,7 @@ function Dashboard() {
 const loadAttendanceTimeline = async (filters = lineFilters) => {
   try {
     const res = await axios.get(
-      "https://library-management-system-Isn2.onrender.com/admin/charts/attendance-timeline",
+      "https://library-management-system-fsn2.onrender.com/admin/charts/attendance-timeline",
       {
         params: {
           date: filters.date,
@@ -145,11 +145,11 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
     async function fetchAll() {
       try {
         const [sRes, cRes, pieRes, barRes, timelineRes] = await Promise.all([
-          axios.get("https://library-management-system-Isn2.onrender.com/admin/summary"),
-          axios.get("https://library-management-system-Isn2.onrender.com/admin/stats/charts"),
-          axios.get("https://library-management-system-Isn2.onrender.com/admin/charts/members"),
-          axios.get("https://library-management-system-Isn2.onrender.com/admin/charts/department-wise"),
-          axios.get("https://library-management-system-Isn2.onrender.com/admin/charts/attendance-timeline", {
+          axios.get("https://library-management-system-fsn2.onrender.com/admin/summary"),
+          axios.get("https://library-management-system-fsn2.onrender.com/admin/stats/charts"),
+          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/members"),
+          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/department-wise"),
+          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/attendance-timeline", {
             params: {
               date: lineFilters.date,
               start_hour: lineFilters.startHour,
@@ -177,7 +177,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
   useEffect(() => {
     if (memberFilters.memberType === "student") {
       axios
-        .get("https://library-management-system-Isn2.onrender.com/admin/filters/student/departments")
+        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/departments")
         .then(res => setStudentDepartments(res.data));
     }
   }, [memberFilters.memberType]);
@@ -190,7 +190,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
         params.department = memberFilters.department;
 
       axios
-        .get("https://library-management-system-Isn2.onrender.com/admin/filters/student/years", { params })
+        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/years", { params })
         .then(res => setStudentYears(res.data));
     } else {
       setStudentYears([]);
@@ -207,7 +207,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
         params.year = memberFilters.year;
 
       axios
-        .get("https://library-management-system-Isn2.onrender.com/admin/filters/student/divisions", { params })
+        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/divisions", { params })
         .then(res => setStudentDivisions(res.data));
     } else {
       setStudentDivisions([]);
@@ -218,7 +218,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
   useEffect(() => {
     if (memberFilters.memberType === "teacher") {
       axios
-        .get("https://library-management-system-Isn2.onrender.com/admin/filters/teacher/departments")
+        .get("https://library-management-system-fsn2.onrender.com/admin/filters/teacher/departments")
         .then(res => setTeacherDepartments(res.data));
     }
   }, [memberFilters.memberType]);

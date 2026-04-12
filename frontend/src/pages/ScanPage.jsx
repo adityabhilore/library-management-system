@@ -4,7 +4,7 @@ import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 import "../styles/scan.css";
 
-const API_URL = "https://library-management-system-Isn2.onrender.com/scan";
+const API_URL = "https://library-management-system-fsn2.onrender.com/scan";
 
 export default function ScanPage() {
   const navigate = useNavigate();

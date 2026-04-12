@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/logs.css";
 
-const API_BASE_URL = "https://library-management-system-Isn2.onrender.com";
+const API_BASE_URL = "https://library-management-system-fsn2.onrender.com";
 
 function ManualEntryModal({ onClose, onSaved }) {
   const [form, setForm] = useState({
@@ -98,7 +98,7 @@ export default ManualEntryModal;
 
 //   const submitForm = async () => {
 //   try {
-//     await axios.post("https://library-management-system-Isn2.onrender.com/admin/logs/manual", null, {
+//     await axios.post("https://library-management-system-fsn2.onrender.com/admin/logs/manual", null, {
 //       params: {
 //         user_id: form.user_id,
 //         role: form.role,
