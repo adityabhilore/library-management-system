@@ -9,12 +9,13 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "https://library-management-system-nine-rose.vercel.app",
-        "http://localhost:3000",  # For local development
-        "http://localhost:5173",   # Vite dev server
+        "http://localhost:3000",
+        "http://localhost:5173",
     ],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization", "*"],
+    max_age=600,
 )
 
 # include all router files
