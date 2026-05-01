@@ -4,14 +4,16 @@ import axios from "axios";
 import { FiArrowLeft } from "react-icons/fi";
 import "../styles/scan.css";
 
-const API_URL = "https://library-management-system-fsn2.onrender.com/scan";
+import { API_BASE_URL } from "../api/config";
+
+const API_URL = `${API_BASE_URL}/scan`;
 
 export default function ScanPage() {
   const navigate = useNavigate();
   const inputRef = useRef(null);
   const [scanValue, setScanValue] = useState("");
-  const [message,   setMessage]   = useState("");
-  const [status,    setStatus]    = useState(""); // "success" | "error"
+  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(""); // "success" | "error"
 
   // Keep focus on input
   useEffect(() => {

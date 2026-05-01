@@ -6,7 +6,9 @@ import { FaSun, FaMoon, FaPlus, FaUpload } from "react-icons/fa";
 
 const DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const ROWS_PER_PAGE = 10;
-const API_BASE_URL = "https://library-management-system-fsn2.onrender.com";
+import { API_BASE_URL } from "../api/config";
+
+const API_BASE_URL_LOCAL = `${API_BASE_URL}`;
 
 export default function TimetablePage() {
   const [day, setDay] = useState("Monday");
@@ -386,12 +388,12 @@ const openEdit = (row) => {
                 <input placeholder="Batch (optional)" onChange={e=>setNewEntry({...newEntry,batch:e.target.value})}/>
                 <input placeholder="Subject" onChange={e=>setNewEntry({...newEntry,subject:e.target.value})} required />
                 <input placeholder="Teacher ID" onChange={e=>setNewEntry({...newEntry,teacher_id:e.target.value})} required />
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <label style={{ fontSize: '12px', marginBottom: '4px', color: 'var(--text-muted)' }}>Start Time</label>
+                <div className="time-input-group">
+                  <label className="time-input-label">Start Time</label>
                   <input type="time" onChange={e=>setNewEntry({...newEntry,start_time:e.target.value})} required />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <label style={{ fontSize: '12px', marginBottom: '4px', color: 'var(--text-muted)' }}>End Time</label>
+                <div className="time-input-group">
+                  <label className="time-input-label">End Time</label>
                   <input type="time" onChange={e=>setNewEntry({...newEntry,end_time:e.target.value})} required />
                 </div>
                 <select onChange={e=>setNewEntry({...newEntry,type:e.target.value})}>

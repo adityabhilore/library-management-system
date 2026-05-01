@@ -341,9 +341,65 @@ nav li:hover:not(.active) {
 @media (max-width: 900px) {
   .sidebar { transform: translateX(-100%); position: fixed; }
   .sidebar.mobile-open { transform: translateX(0); }
-  .main-area { margin-left: 0 !important; padding: 20px 16px; }
+  .main-area { margin-left: 0 !important; padding: 20px 16px; padding-top: 72px !important; }
+  /* Hide the desktop collapse btn on mobile */
+  .collapse-btn { display: none; }
 }
 
 @media (max-width: 768px) {
-  .main-area { padding: 16px !important; }
+  .main-area { padding: 16px !important; padding-top: 68px !important; }
+}
+
+/* ========================
+   HAMBURGER BUTTON (mobile only)
+   ======================== */
+.hamburger-btn {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    position: fixed;
+    top: 14px;
+    left: 14px;
+    z-index: 300;
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    background: var(--sidebar-bg, #1a3c6e);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  }
+  .hamburger-btn span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 2px;
+    transition: all 0.25s ease;
+  }
+}
+
+/* ========================
+   SIDEBAR OVERLAY (mobile only)
+   ======================== */
+.sidebar-overlay {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 199;
+    backdrop-filter: blur(2px);
+  }
 }

@@ -12,31 +12,27 @@ router = APIRouter(prefix="/admin", tags=["Admin"])
 
 @router.post("/login")
 def admin_login(data: AdminLoginRequest):
-    try:
-        conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
 
-        cursor.execute(
-            "SELECT * FROM admin WHERE username=%s LIMIT 1",
-            (data.username,)
-        )
-        admin = cursor.fetchone()
-        conn.close()
+    cursor.execute(
+        "SELECT * FROM admin WHERE username=%s LIMIT 1",
+        (data.username,)
+    )
+    admin = cursor.fetchone()
+    conn.close()
 
-        if not admin:
-            return {"status": "failed", "message": "Invalid credentials"}
+    if not admin:
+        return {"status": "failed", "message": "Invalid credentials"}
 
-        if not verify_password(data.password, admin["password_hash"]):
-            return {"status": "failed", "message": "Invalid credentials"}
+    if not verify_password(data.password, admin["password_hash"]):
+        return {"status": "failed", "message": "Invalid credentials"}
 
-        return {
-            "status": "success",
-            "username": admin["username"],
-            "role": admin["role"]
-        }
-    except Exception as e:
-        print(f"❌ Login Error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"Server error: {str(e)}")
+    return {
+        "status": "success",
+        "username": admin["username"],
+        "role": admin["role"]
+    }
 
 
 

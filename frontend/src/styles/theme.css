@@ -67,6 +67,25 @@
   --transition:      all 0.2s ease;
   --transition-slow: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* Spacing Scale */
+  --space-xs:        4px;
+  --space-sm:        8px;
+  --space-md:        16px;
+  --space-lg:        24px;
+  --space-xl:        32px;
+
+  /* Z-Index Stack */
+  --z-sticky:        50;
+  --z-dropdown:      100;
+  --z-modal:         1000;
+
+  /* Button States */
+  --btn-primary-bg:  #1a3c6e;
+  --btn-primary-hover: #163264;
+  --btn-secondary-bg: #e0e7ff;
+  --btn-secondary-text: #1a3c6e;
+  --btn-disabled-opacity: 0.5;
+
   /* Glass (unused in gov style, kept for compat) */
   --glass: none;
 }
@@ -386,7 +405,7 @@ tbody tr:last-child td { border-bottom: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-modal);
 }
 
 .modal-content {

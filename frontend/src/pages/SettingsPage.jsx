@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 import "../styles/settings.css";
 import AdminLayout from "../components/AdminLayout";
 import { FaSave, FaLock, FaUser, FaKey, FaTrash } from "react-icons/fa";
@@ -16,7 +17,7 @@ function SettingsPage() {
   // Load admin profile
   useEffect(() => {
     axios
-      .get("https://library-management-system-Isn2.onrender.com/admin/profile")
+      .get(`${API_BASE_URL}/admin/profile`)
       .then((res) => {
         setUsername(res.data.username);
         setRole(res.data.role);
@@ -25,6 +26,16 @@ function SettingsPage() {
         setError("Failed to load admin profile");
       });
   }, []);
+
+  const handlePasswordChange = (setter, value) => {
+    // Limit password to 72 bytes (bcrypt limit)
+    const truncated = value.substring(0, 72);
+    setter(truncated);
+    if (value.length > 72) {
+      setError("Password is limited to 72 characters");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
 
   const handleUpdate = async () => {
     setMessage("");
@@ -38,7 +49,7 @@ function SettingsPage() {
     setLoading(true);
     try {
       const res = await axios.put(
-        "https://library-management-system-Isn2.onrender.com/admin/update-profile",
+        `${API_BASE_URL}/admin/update-profile`,
         {
           username: username,
           old_password: oldPassword,
@@ -51,6 +62,24 @@ function SettingsPage() {
       setNewPassword("");
     } catch (err) {
       setError(err.response?.data?.detail || "Update failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClearOldLogs = async () => {
+    if (!window.confirm("⚠️ This will delete all logs older than 30 days. This action cannot be undone. Continue?")) {
+      return;
+    }
+
+    setLoading(true);
+    try {
+      await axios.delete(`${API_BASE_URL}/admin/logs/clear-old`);
+      setMessage("✅ Old logs (30+ days) cleared successfully");
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      setError(err.response?.data?.detail || "Failed to clear logs");
+      setTimeout(() => setError(""), 3000);
     } finally {
       setLoading(false);
     }
@@ -120,7 +149,7 @@ function SettingsPage() {
                 id="old-password"
                 type="password"
                 value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
+                onChange={(e) => handlePasswordChange(setOldPassword, e.target.value)}
                 placeholder="Enter current password"
               />
             </div>
@@ -131,7 +160,7 @@ function SettingsPage() {
                 id="new-password"
                 type="password"
                 value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
+                onChange={(e) => handlePasswordChange(setNewPassword, e.target.value)}
                 placeholder="Enter new password"
               />
             </div>
@@ -168,8 +197,12 @@ function SettingsPage() {
             <p className="danger-zone-desc">
               These actions are permanent and cannot be undone. Please proceed with caution.
             </p>
-            <button className="settings-btn danger">
-              <FaTrash style={{ marginRight: 8 }} /> Clear All Session Data
+            <button 
+              className="settings-btn danger"
+              onClick={handleClearOldLogs}
+              disabled={loading}
+            >
+              <FaTrash style={{ marginRight: 8 }} /> {loading ? "Clearing..." : "Clear Old Logs (30+ Days)"}
             </button>
           </div>
 

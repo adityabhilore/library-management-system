@@ -16,21 +16,21 @@ def dashboard_stats():
         FROM logs
         WHERE action='ENTRY'
     """)
-    total_inside = cursor.fetchone()["count"]
+    total_inside = int(cursor.fetchone()["count"] or 0)
 
     cursor.execute("""
         SELECT COUNT(*) AS count
         FROM logs
         WHERE status='SKIP' AND DATE(scan_time)=CURDATE()
     """)
-    alerts_today = cursor.fetchone()["count"]
+    alerts_today = int(cursor.fetchone()["count"] or 0)
 
     cursor.execute("""
         SELECT COUNT(*) AS count
         FROM logs
         WHERE DATE(scan_time)=CURDATE()
     """)
-    total_today = cursor.fetchone()["count"]
+    total_today = int(cursor.fetchone()["count"] or 0)
 
     conn.close()
 
@@ -47,10 +47,10 @@ def admin_summary():
     cur = conn.cursor(dictionary=True)
 
     cur.execute("SELECT COUNT(*) AS cnt FROM students")
-    total_students = cur.fetchone()["cnt"]
+    total_students = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("SELECT COUNT(*) AS cnt FROM teachers")
-    total_teachers = cur.fetchone()["cnt"]
+    total_teachers = int(cur.fetchone()["cnt"] or 0)
 
     today = datetime.now().strftime("%Y-%m-%d")
 
@@ -59,24 +59,24 @@ def admin_summary():
         FROM logs
         WHERE DATE(scan_time)=%s AND action='ENTRY'
     """, (today,))
-    today_entries = cur.fetchone()["cnt"]
+    today_entries = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("""
         SELECT COUNT(*) AS cnt
         FROM logs
         WHERE DATE(scan_time)=%s AND action='EXIT'
     """, (today,))
-    today_exits = cur.fetchone()["cnt"]
+    today_exits = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("SELECT COUNT(*) AS cnt FROM logs")
-    total_logs = cur.fetchone()["cnt"]
+    total_logs = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("""
         SELECT COUNT(*) AS cnt
         FROM logs
         WHERE status='SKIP' AND DATE(scan_time)=%s
     """, (today,))
-    skipping_alerts = cur.fetchone()["cnt"]
+    skipping_alerts = int(cur.fetchone()["cnt"] or 0)
 
     conn.close()
 
@@ -96,10 +96,10 @@ def stats_charts():
     cur = conn.cursor(dictionary=True)
 
     cur.execute("SELECT COUNT(*) AS cnt FROM students")
-    students = cur.fetchone()["cnt"]
+    students = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("SELECT COUNT(*) AS cnt FROM teachers")
-    teachers = cur.fetchone()["cnt"]
+    teachers = int(cur.fetchone()["cnt"] or 0)
 
     today = datetime.now().strftime("%Y-%m-%d")
 
@@ -108,14 +108,14 @@ def stats_charts():
         FROM logs
         WHERE DATE(scan_time)=%s AND action='ENTRY'
     """, (today,))
-    entry = cur.fetchone()["cnt"]
+    entry = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("""
         SELECT COUNT(*) AS cnt
         FROM logs
         WHERE DATE(scan_time)=%s AND action='EXIT'
     """, (today,))
-    exitc = cur.fetchone()["cnt"]
+    exitc = int(cur.fetchone()["cnt"] or 0)
 
     cur.execute("""
         SELECT HOUR(scan_time) AS hr, COUNT(*) AS cnt
@@ -131,7 +131,7 @@ def stats_charts():
     return {
         "members": {"students": students, "teachers": teachers},
         "today": {"entry": entry, "exit": exitc},
-        "logs_by_hour": [{"hour": r["hr"], "count": r["cnt"]} for r in rows]
+        "logs_by_hour": [{"hour": int(r["hr"]), "count": int(r["cnt"])} for r in rows]
     }
 
 
@@ -392,8 +392,8 @@ def attendance_timeline(
         SELECT
             HOUR(scan_time) AS hr,
             SUM(action='ENTRY') AS entry_count,
-            SUM(action='EXIT') AS exit_count,
-            SUM(status='SKIP') AS skip_count
+            SUM(action='EXIT')  AS exit_count,
+            SUM(status='SKIP')  AS skip_count
         FROM logs
         WHERE DATE(scan_time) = {date_condition}
           AND HOUR(scan_time) BETWEEN %s AND %s
@@ -412,13 +412,14 @@ def attendance_timeline(
 
     timeline = []
     for h in range(start_hour, end_hour + 1):
-        label = f"{h if h<=12 else h-12} {'AM' if h<12 else 'PM'}"
+        label = f"{h if h <= 12 else h - 12} {'AM' if h < 12 else 'PM'}"
         row = next((r for r in rows if r["hr"] == h), None)
         timeline.append({
-            "time": label,
-            "entry": row["entry_count"] if row else 0,
-            "exit": row["exit_count"] if row else 0,
-            "skip": row["skip_count"] if row else 0
+            "time":  label,
+            # SUM() returns Decimal in mysql-connector — cast to int
+            "entry": int(row["entry_count"]) if row and row["entry_count"] is not None else 0,
+            "exit":  int(row["exit_count"])  if row and row["exit_count"]  is not None else 0,
+            "skip":  int(row["skip_count"])  if row and row["skip_count"]  is not None else 0,
         })
 
     return timeline

@@ -13,14 +13,14 @@
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
-  color: var(--primary-glow);
+  color: var(--primary);
 }
 
 .calendar-filter-bar {
   display: flex;
   gap: 12px;
   margin-bottom: 20px;
-  background: rgba(0,0,0,0.2);
+  background: var(--bg-panel-hover);
   padding: 16px;
   border-radius: 12px;
   border: 1px solid var(--border);
@@ -47,6 +47,6 @@
 
 .pagination { display:flex; justify-content:flex-end; gap:12px; margin-top:12px; }
 
-.modal { position:fixed; inset:0; background:rgba(0,0,0,0.7); backdrop-filter: blur(8px); display:flex; justify-content:center; align-items:center; z-index: 50; }
-.modal-box { background:#18181b; border: 1px solid var(--border); padding:30px; border-radius:20px; width:400px; color: white; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+.modal { position:fixed; inset:0; background:rgba(15,23,42,0.6); backdrop-filter: blur(8px); display:flex; justify-content:center; align-items:center; z-index: var(--z-modal); }
+.modal-box { background:var(--bg-panel); border: 1px solid var(--border); padding:30px; border-radius:20px; width:400px; color: var(--text-main); box-shadow: var(--shadow-lg); }
 .modal-actions { display:flex; justify-content:flex-end; gap:12px; margin-top:24px; }

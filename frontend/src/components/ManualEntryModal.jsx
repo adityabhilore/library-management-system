@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../styles/logs.css";
 
-const API_BASE_URL = "https://library-management-system-fsn2.onrender.com";
+import { API_BASE_URL } from "../api/config";
+
+const API_URL = API_BASE_URL;
 
 function ManualEntryModal({ onClose, onSaved }) {
   const [form, setForm] = useState({

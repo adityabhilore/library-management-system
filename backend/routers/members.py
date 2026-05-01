@@ -69,7 +69,7 @@ def get_members(
     table = "students" if role == "student" else "teachers"
     id_col = "student_id" if role == "student" else "teacher_id"
 
-    cur.execute(
+    cur.execute(        
         f"SELECT COUNT(*) AS total FROM {table} {where_clause}",
         params
     )

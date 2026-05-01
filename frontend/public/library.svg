@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="#1a3a6e"/>
+  
+  <!-- Building columns base -->
+  <rect x="18" y="70" width="64" height="6" rx="2" fill="#ffffff"/>
+  
+  <!-- Roof / pediment -->
+  <polygon points="50,18 82,38 18,38" fill="#ffffff"/>
+  
+  <!-- Column 1 -->
+  <rect x="26" y="40" width="8" height="30" rx="1" fill="#ffffff"/>
+  <!-- Column 2 -->
+  <rect x="38" y="40" width="8" height="30" rx="1" fill="#ffffff"/>
+  <!-- Column 3 -->
+  <rect x="54" y="40" width="8" height="30" rx="1" fill="#ffffff"/>
+  <!-- Column 4 -->
+  <rect x="66" y="40" width="8" height="30" rx="1" fill="#ffffff"/>
+
+  <!-- Book on top of pediment (small) -->
+  <rect x="40" y="22" width="20" height="14" rx="2" fill="#f4b942"/>
+  <line x1="50" y1="22" x2="50" y2="36" stroke="#1a3a6e" stroke-width="1.5"/>
+</svg>

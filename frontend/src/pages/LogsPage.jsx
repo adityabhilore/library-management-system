@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 import ManualEntryModal from "../components/ManualEntryModal";
 import "../styles/logs.css";
 import AdminLayout from "../components/AdminLayout";
@@ -71,7 +72,7 @@ const [batches, setBatches] = useState([]);
       params.department = filtersToUse.department;
     }
 
-    const res = await axios.get("https://library-management-system-fsn2.onrender.com/admin/logs", { params });
+    const res = await axios.get(`${API_BASE_URL}/admin/logs`, { params });
 
     // 🔁 map backend response → UI expected structure
     const mappedLogs = (res.data.data || []).map((log) => {
@@ -133,7 +134,7 @@ const [batches, setBatches] = useState([]);
 
   const fetchDepartments = async () => {
   try {
-    const res = await axios.get("https://library-management-system-fsn2.onrender.com/admin/logs/departments");
+    const res = await axios.get(`${API_BASE_URL}/admin/logs/departments`);
     setDepartments(res.data || []);
   } catch (err) {
     console.error("Failed to load departments");
@@ -147,7 +148,7 @@ useEffect(() => {
 useEffect(() => {
   const fetchDepartments = async () => {
     const res = await axios.get(
-      "https://library-management-system-fsn2.onrender.com/admin/logs/departments/by-role",
+      `${API_BASE_URL}/admin/logs/departments/by-role`,
       { params: { role: filters.role } }
     );
     setDepartments(res.data || []);
@@ -158,7 +159,7 @@ useEffect(() => {
 
 useEffect(() => {
   axios
-    .get("https://library-management-system-Isn2.onrender.com/admin/logs/students/meta")
+    .get(`${API_BASE_URL}/admin/logs/students/meta`)
     .then((res) => {
       setYears(res.data.years || []);
       setDivisions(res.data.divisions || []);
@@ -186,7 +187,7 @@ const exportLogs = async () => {
     }
 
     const res = await axios.get(
-      "https://library-management-system-Isn2.onrender.com/admin/logs/export",
+      `${API_BASE_URL}/admin/logs/export`,
       {
         params,
         responseType: "blob",

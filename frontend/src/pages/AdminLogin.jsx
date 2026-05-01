@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../api/config";
 import {
   FaLock,
   FaUser,
@@ -23,6 +24,17 @@ function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  const handlePasswordChange = (e) => {
+    const value = e.target.value;
+    // Limit password to 72 bytes (bcrypt limit)
+    const truncated = value.substring(0, 72);
+    setPassword(truncated);
+    if (value.length > 72) {
+      setError("Password is limited to 72 characters");
+      setTimeout(() => setError(""), 3000);
+    }
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -36,7 +48,7 @@ function AdminLogin() {
     }
 
     try {
-      const response = await axios.post("https://library-management-system-fsn2.onrender.com/admin/login", {
+      const response = await axios.post(`${API_BASE_URL}/admin/login`, {
         username,
         password,
       });
@@ -75,7 +87,7 @@ function AdminLogin() {
               <div className="login-logo">
                 <img src={logo} alt="Library" className="logo-img" />
               </div>
-              <h1>LibAdmin</h1>
+              <h1>LibAccess</h1>
               <p>Professional Management Portal</p>
             </div>
 
@@ -158,7 +170,7 @@ function AdminLogin() {
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={handlePasswordChange}
                     disabled={isLoading}
                     autoComplete="off"
                   />

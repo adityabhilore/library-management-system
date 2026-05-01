@@ -82,6 +82,10 @@
   gap: 16px;
 }
 
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+}
+
 .center { text-align: center; }
 
 /* Upload CSV Section (New Styles) */
@@ -108,4 +112,13 @@
   display: flex;
   align-items: center;
   gap: 16px;
+  flex-wrap: wrap;    /* ← wraps file input + button on narrow screens */
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .members-topbar { flex-direction: column; gap: 8px; }
+  .role-selector { flex-direction: column; }
+  .members-filters { flex-direction: column; }
+  .members-filters select { min-width: 100%; }
 }

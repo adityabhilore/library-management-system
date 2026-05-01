@@ -61,6 +61,7 @@ export default function AdminLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { darkMode, toggleTheme } = useTheme();
   const admin = getAdminInfo();
 
@@ -82,10 +83,29 @@ export default function AdminLayout({ children }) {
 
   const isActive = (path) => location.pathname === path;
 
+  // Close mobile sidebar on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   return (
     <div className="dashboard-root">
+      {/* =================== HAMBURGER (mobile only) =================== */}
+      <button
+        className="hamburger-btn"
+        onClick={() => setMobileOpen(!mobileOpen)}
+        aria-label="Toggle menu"
+      >
+        <span /><span /><span />
+      </button>
+
+      {/* =================== OVERLAY (mobile only) =================== */}
+      {mobileOpen && (
+        <div className="sidebar-overlay" onClick={() => setMobileOpen(false)} />
+      )}
+
       {/* =================== SIDEBAR =================== */}
-      <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+      <aside className={`sidebar ${collapsed ? "collapsed" : ""} ${mobileOpen ? "mobile-open" : ""}`}>
 
         {/* Brand Header */}
         <div className="brand">

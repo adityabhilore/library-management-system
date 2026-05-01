@@ -4,7 +4,9 @@ import AdminLayout, { useTheme } from "../components/AdminLayout";
 import "../styles/academicCalendar.css";
 import { FaPlus, FaEdit, FaTrash, FaSearch, FaFilter, FaUpload, FaSun, FaMoon } from "react-icons/fa";
 
-const API_URL = "https://library-management-system-fsn2.onrender.com/academic-calendar";
+import { API_BASE_URL } from "../api/config";
+
+const API_URL = `${API_BASE_URL}/academic-calendar`;
 const PAGE_SIZE = 10;
 
 export default function AcademicCalendarPage() {

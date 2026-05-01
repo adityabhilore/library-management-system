@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 import AdminLayout, { useTheme } from "../components/AdminLayout";
 import "../styles/members.css";
 import { FaSun, FaMoon, FaPlus, FaUpload } from "react-icons/fa";
@@ -56,7 +57,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.get(
-        `https://library-management-system-Isn2.onrender.com/admin/members/${r}`,
+        `${API_BASE_URL}/admin/members/${r}`,
         {
           params: {
             page: p,
@@ -80,7 +81,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.get(
-        `https://library-management-system-Isn2.onrender.com/admin/members/filters/${r}`
+        `${API_BASE_URL}/admin/members/filters/${r}`
       );
       setFilterOptions(res.data);
     } catch {
@@ -143,7 +144,7 @@ export default function MembersPage() {
 
     try {
       await axios.post(
-        "https://library-management-system-Isn2.onrender.com/admin/members/add",
+        `${API_BASE_URL}/admin/members/add`,
         fd
       );
 
@@ -217,7 +218,7 @@ export default function MembersPage() {
 
     try {
       await axios.put(
-        "https://library-management-system-Isn2.onrender.com/admin/members/update",
+        `${API_BASE_URL}/admin/members/update`,
         fd
       );
       alert("Updated successfully");
@@ -233,7 +234,7 @@ export default function MembersPage() {
     if (!confirmDelete) return;
 
     try {
-      await axios.delete("https://library-management-system-Isn2.onrender.com/admin/members/delete", {
+      await axios.delete(`${API_BASE_URL}/admin/members/delete`, {
         params: {
           member_id: id,
           role: role
@@ -268,7 +269,7 @@ export default function MembersPage() {
 
     try {
       const res = await axios.post(
-        "https://library-management-system-Isn2.onrender.com/admin/members/upload",
+        `${API_BASE_URL}/admin/members/upload`,
         fd
       );
 

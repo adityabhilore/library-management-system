@@ -10,4 +10,37 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    proxy: {
+      // Proxy all API paths to the FastAPI backend
+      '/admin': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/scan': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/logs': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/members': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/auth': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/timetable': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+      '/academic_calendar': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
+  },
 })

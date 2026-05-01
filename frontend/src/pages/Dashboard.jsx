@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
+import { API_BASE_URL } from "../api/config";
 import AdminLayout from "../components/AdminLayout";
 import {
   ResponsiveContainer,
@@ -56,11 +57,14 @@ function Dashboard() {
     endHour: 18,
   });
 
+  // Prevent lineFilters effect from firing on initial mount
+  const isFirstMount = useRef(true);
+
   // ------------------ LOAD PIE ------------------
   const loadMemberChart = async (filters = {}) => {
     try {
       const res = await axios.get(
-        "https://library-management-system-fsn2.onrender.com/admin/charts/members",
+        `${API_BASE_URL}/admin/charts/members`,
         { params: filters }
       );
       setMemberPie(res.data?.length ? res.data : [{ name: "No Data", value: 0 }]);
@@ -72,7 +76,7 @@ function Dashboard() {
   const loadDepartmentBarChart = async (filters = {}) => {
   try {
     const res = await axios.get(
-      "https://library-management-system-fsn2.onrender.com/admin/charts/department-wise",
+      `${API_BASE_URL}/admin/charts/department-wise`,
       { params: filters }
     );
     setDeptBarData(res.data);
@@ -85,7 +89,7 @@ function Dashboard() {
 const loadAttendanceTimeline = async (filters = lineFilters) => {
   try {
     const res = await axios.get(
-      "https://library-management-system-fsn2.onrender.com/admin/charts/attendance-timeline",
+      `${API_BASE_URL}/admin/charts/attendance-timeline`,
       {
         params: {
           date: filters.date,
@@ -140,33 +144,40 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
 
   
 
-  // ------------------ ALL INITIAL DATA: single batch ------------------
+  // ------------------ ALL INITIAL DATA: individual fetches so one failure doesn't block all ------------------
   useEffect(() => {
     async function fetchAll() {
+      setLoading(true);
+      setErr("");
       try {
-        const [sRes, cRes, pieRes, barRes, timelineRes] = await Promise.all([
-          axios.get("https://library-management-system-fsn2.onrender.com/admin/summary"),
-          axios.get("https://library-management-system-fsn2.onrender.com/admin/stats/charts"),
-          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/members"),
-          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/department-wise"),
-          axios.get("https://library-management-system-fsn2.onrender.com/admin/charts/attendance-timeline", {
-            params: {
-              date: lineFilters.date,
-              start_hour: lineFilters.startHour,
-              end_hour: lineFilters.endHour,
-            },
-          }),
-        ]);
+        const sRes = await axios.get(`${API_BASE_URL}/admin/summary`);
         setSummary(sRes.data);
+      } catch { setSummary(null); }
+
+      try {
+        const cRes = await axios.get(`${API_BASE_URL}/admin/stats/charts`);
         setCharts(cRes.data);
+      } catch { setCharts(null); }
+
+      try {
+        const pieRes = await axios.get(`${API_BASE_URL}/admin/charts/members`);
         setMemberPie(pieRes.data?.length ? pieRes.data : [{ name: "No Data", value: 0 }]);
+      } catch { setMemberPie([{ name: "No Data", value: 0 }]); }
+
+      try {
+        const barRes = await axios.get(`${API_BASE_URL}/admin/charts/department-wise`);
         setDeptBarData(barRes.data);
+      } catch { setDeptBarData([]); }
+
+      try {
+        const timelineRes = await axios.get(
+          `${API_BASE_URL}/admin/charts/attendance-timeline`,
+          { params: { date: lineFilters.date, start_hour: lineFilters.startHour, end_hour: lineFilters.endHour } }
+        );
         setAttendanceLineData(timelineRes.data);
-      } catch {
-        setErr("Failed to load dashboard");
-      } finally {
-        setLoading(false);
-      }
+      } catch { setAttendanceLineData([]); }
+
+      setLoading(false);
     }
     fetchAll();
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -177,7 +188,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
   useEffect(() => {
     if (memberFilters.memberType === "student") {
       axios
-        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/departments")
+        .get(`${API_BASE_URL}/admin/filters/student/departments`)
         .then(res => setStudentDepartments(res.data));
     }
   }, [memberFilters.memberType]);
@@ -190,7 +201,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
         params.department = memberFilters.department;
 
       axios
-        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/years", { params })
+        .get(`${API_BASE_URL}/admin/filters/student/years`, { params })
         .then(res => setStudentYears(res.data));
     } else {
       setStudentYears([]);
@@ -207,7 +218,7 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
         params.year = memberFilters.year;
 
       axios
-        .get("https://library-management-system-fsn2.onrender.com/admin/filters/student/divisions", { params })
+        .get(`${API_BASE_URL}/admin/filters/student/divisions`, { params })
         .then(res => setStudentDivisions(res.data));
     } else {
       setStudentDivisions([]);
@@ -218,38 +229,30 @@ const loadAttendanceTimeline = async (filters = lineFilters) => {
   useEffect(() => {
     if (memberFilters.memberType === "teacher") {
       axios
-        .get("https://library-management-system-fsn2.onrender.com/admin/filters/teacher/departments")
+        .get(`${API_BASE_URL}/admin/filters/teacher/departments`)
         .then(res => setTeacherDepartments(res.data));
     }
   }, [memberFilters.memberType]);
 
 useEffect(() => {
+  // Skip the very first run — initial data is loaded by fetchAll above
+  if (isFirstMount.current) {
+    isFirstMount.current = false;
+    return;
+  }
   loadAttendanceTimeline(lineFilters);
 }, [lineFilters]);
 
 
 
   if (loading) return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', alignItems: 'center',
-      justifyContent: 'center', height: '60vh', gap: '16px',
-      color: '#4a5568', fontFamily: 'Inter, sans-serif'
-    }}>
-      <div style={{
-        width: 40, height: 40, border: '3px solid #e2e8f0',
-        borderTopColor: '#1a3c6e', borderRadius: '50%',
-        animation: 'spin 0.75s linear infinite'
-      }} />
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      <span style={{ fontSize: 14, fontWeight: 500 }}>Loading dashboard data...</span>
+    <div className="dashboard-loading">
+      <div className="dashboard-spinner" />
+      <span className="dashboard-loading-text">Loading dashboard data...</span>
     </div>
   );
   if (err) return (
-    <div style={{
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      height: '60vh', color: '#b91c1c', fontSize: 15, fontWeight: 500,
-      fontFamily: 'Inter, sans-serif'
-    }}>
+    <div className="dashboard-error">
       ⚠️ {err}
     </div>
   );

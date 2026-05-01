@@ -1,22 +1,32 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
-from routers import auth, scan, logs, dashboard, members, timetable, academic_calendar, reports, profiles
+from fastapi.responses import JSONResponse
+from routers import auth, scan, logs, dashboard, members,timetable,academic_calendar
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://library-management-system-nine-rose.vercel.app",
-        "http://localhost:3000",
-        "http://localhost:5173",
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization", "*"],
-    max_age=600,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc):
+    return JSONResponse(
+        status_code=500,
+        content={
+            "status": "ERROR",
+            "message": str(exc)
+        },
+        headers={
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "*",
+            "Access-Control-Allow-Headers": "*",
+        }
+    )
 
 # include all router files
 app.include_router(auth.router)
@@ -26,8 +36,6 @@ app.include_router(dashboard.router)
 app.include_router(members.router)
 app.include_router(timetable.router)
 app.include_router(academic_calendar.router)
-app.include_router(reports.router)
-app.include_router(profiles.router)
 
 @app.get("/")
 def home():

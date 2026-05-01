@@ -232,18 +232,50 @@
 }
 
 .tt-filters{
-  display:grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr auto auto;
-  gap:12px;
-  margin:20px 0;
-  align-items:center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 20px 0;
+  align-items: center;
 }
 
 .tt-filters select{
-  border-radius:6px;
-  border:1px solid #ddd;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  flex: 1;
+  min-width: 120px;
 }
 
 .tt-filters .btn{
-  height:38px;
+  height: 38px;
+}
+
+/* Time Input Styling */
+.time-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.time-input-label {
+  font-size: 12px;
+  margin-bottom: 4px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .timetable-topbar { flex-direction: column; gap: 8px; }
+  .tt-days button { padding: 6px 12px; font-size: 13px; }
+  .tt-card { padding: 16px; }
+  .modal-content { padding: 20px; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .modal-actions { flex-direction: column; }
+  .modal-actions .btn { width: 100%; text-align: center; }
 }

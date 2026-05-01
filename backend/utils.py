@@ -157,6 +157,7 @@ def send_skip_email(
     teacher_email,
     teacher_name,
     student_name,
+    student_id,
     subject,
     scan_time
 ):
@@ -167,8 +168,10 @@ The following student was detected inside the library
 during your scheduled lecture.
 
 Student Name : {student_name}
+Student ID   : {student_id} 
 Subject      : {subject}
 Scan Time    : {scan_time}
+
 
 This is a system-generated alert.
 
@@ -180,11 +183,19 @@ Smart Library Monitoring System
     msg["From"] = SENDER_EMAIL
     msg["To"] = teacher_email
 
-    server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-    server.starttls()
-    server.login(SENDER_EMAIL, SENDER_PASSWORD)
-    server.send_message(msg)
-    server.quit()
+    try:
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(SENDER_EMAIL, SENDER_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+        print(f"[EMAIL] ✅ Alert sent to {teacher_email}")
+    except smtplib.SMTPAuthenticationError:
+        print("[EMAIL] ❌ Authentication failed — check SENDER_EMAIL and SENDER_PASSWORD")
+    except smtplib.SMTPException as e:
+        print(f"[EMAIL] ❌ SMTP error: {e}")
+    except Exception as e:
+        print(f"[EMAIL] ❌ Unexpected error: {e}")
 
 
 def normalize_text(value: str, mode="upper"):
