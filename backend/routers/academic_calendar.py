@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from database import get_db_connection
 from pydantic import BaseModel
 from typing import List
-from utils import normalize_text   # ✅ ADDED
+from utils import normalize_text, normalize_date
 
 router = APIRouter(prefix="/academic-calendar", tags=["Academic Calendar"])
 
@@ -33,6 +33,10 @@ def get_events():
 def add_event(event: AcademicEvent):
     event.event_type = normalize_text(event.event_type, "upper")       # ✅ ADDED
     event.description = normalize_text(event.description, "sentence")  # ✅ ADDED
+    try:
+        event.date = normalize_date(event.date)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -56,6 +60,10 @@ def add_event(event: AcademicEvent):
 def update_event(event_id: int, event: AcademicEvent):
     event.event_type = normalize_text(event.event_type, "upper")       # ✅ ADDED
     event.description = normalize_text(event.description, "sentence")  # ✅ ADDED
+    try:
+        event.date = normalize_date(event.date)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -109,14 +117,22 @@ def bulk_add_events(events: List[AcademicEvent]):
     VALUES (%s, %s, %s)
     """
 
-    values = [
-        (
-            e.date,
-            normalize_text(e.event_type, "upper"),        # ✅ ADDED
-            normalize_text(e.description, "sentence")     # ✅ ADDED
+    values = []
+    for e in events:
+        try:
+            normalized_date = normalize_date(e.date)
+        except ValueError as exc:
+            cursor.close()
+            conn.close()
+            raise HTTPException(status_code=400, detail=str(exc))
+
+        values.append(
+            (
+                normalized_date,
+                normalize_text(e.event_type, "upper"),        # ✅ ADDED
+                normalize_text(e.description, "sentence")     # ✅ ADDED
+            )
         )
-        for e in events
-    ]
 
     cursor.executemany(query, values)
 

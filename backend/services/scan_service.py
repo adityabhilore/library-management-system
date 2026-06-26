@@ -24,6 +24,38 @@ def process_scan(user_id: str):
     last_action = get_last_action(user_id)
     next_action = "EXIT" if last_action == "ENTRY" else "ENTRY"
 
+    # If today has any academic calendar event, do not mark students as skipping lectures.
+    if next_action == "ENTRY" and is_academic_calendar_day():
+        teacher = check_teacher(user_id)
+        if teacher:
+            insert_log(
+                student_id=user_id,
+                action=normalize_text(next_action, "upper"),
+                status="NORMAL"
+            )
+
+            return {
+                "status": "SUCCESS",
+                "role": "teacher",
+                "action": next_action,
+                "message": f"Teacher {next_action} Successful"
+            }
+
+        student = check_student(user_id)
+        if student:
+            insert_log(
+                student_id=user_id,
+                action=normalize_text(next_action, "upper"),
+                status="NORMAL"
+            )
+
+            return {
+                "status": "SUCCESS",
+                "role": "student",
+                "action": next_action,
+                "message": f"Student {next_action} Successful"
+            }
+
     # ================= TEACHER =================
     teacher = check_teacher(user_id)
     if teacher:
@@ -95,7 +127,7 @@ def process_scan(user_id: str):
     # ================= INVALID =================
     return {
         "status": "ERROR",
-        "message": "User not found"
+        "message": "INVALID ID"
     }
 
 
@@ -132,6 +164,31 @@ def get_current_lecture(department, year, division, batch):
     lecture = cur.fetchone()
     conn.close()
     return lecture
+
+
+# =========================================================
+# HELPER: CHECK ACADEMIC CALENDAR DAY
+# =========================================================
+def is_academic_calendar_day():
+
+    conn = get_db_connection()
+    cur = conn.cursor(dictionary=True)
+
+    today = datetime.now().strftime("%Y-%m-%d")
+
+    cur.execute(
+        """
+        SELECT event_id
+        FROM academic_calendar
+        WHERE date = %s
+        LIMIT 1
+        """,
+        (today,)
+    )
+
+    event = cur.fetchone()
+    conn.close()
+    return event is not None
 
 
 # =========================================================

@@ -1,7 +1,8 @@
 import requests
 import time
 
-ESP32_IP = "10.235.95.250"
+# ✅ Only this line changed — everything else is exactly same
+ESP32_HOST = "esp32-door.local"   # mDNS hostname — never changes
 
 # cooldown timer
 last_open_time = 0
@@ -19,7 +20,7 @@ def open_door():
         return
 
     try:
-        response = requests.get(f"http://{ESP32_IP}/open", timeout=2)
+        response = requests.get(f"http://{ESP32_HOST}/open", timeout=2)  # ✅ hostname used here
 
         if response.status_code == 200:
             print("Door opened successfully")

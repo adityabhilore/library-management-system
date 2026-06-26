@@ -37,7 +37,7 @@ export default defineConfig({
         target: 'http://localhost:8000',
         changeOrigin: true,
       },
-      '/academic_calendar': {
+      '/academic-calendar': {
         target: 'http://localhost:8000',
         changeOrigin: true,
       },

@@ -147,6 +147,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 import smtplib
 from email.mime.text import MIMEText
+from datetime import datetime
 
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
@@ -218,6 +219,24 @@ def normalize_text(value: str, mode="upper"):
         return value.capitalize()
 
     return value
+
+
+def normalize_date(value: str) -> str:
+    """
+    Convert common calendar input formats to MySQL date format (YYYY-MM-DD).
+    """
+    if value is None:
+        return None
+
+    value = value.strip()
+
+    for date_format in ("%Y-%m-%d", "%d-%m-%Y", "%d/%m/%Y", "%m/%d/%Y"):
+        try:
+            return datetime.strptime(value, date_format).strftime("%Y-%m-%d")
+        except ValueError:
+            continue
+
+    raise ValueError(f"Invalid date format: {value}")
 
 
 # ======================================================

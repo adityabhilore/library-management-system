@@ -49,11 +49,14 @@ export default function AcademicCalendarPage() {
   const fetchEvents = async () => {
     try {
       const res = await axios.get(API_URL);
-      setEvents(res.data);
-      setFilteredEvents(res.data);
+      const data = Array.isArray(res.data) ? res.data : [];
+      setEvents(data);
+      setFilteredEvents(data);
       setCurrentPage(1);
     } catch (err) {
-      console.error("Failed to fetch events");
+      console.error("Failed to fetch events", err);
+      setEvents([]);
+      setFilteredEvents([]);
     }
   };
 
