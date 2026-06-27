@@ -59,6 +59,9 @@ function Dashboard() {
 
   // Prevent lineFilters effect from firing on initial mount
   const isFirstMount = useRef(true);
+  const todayEntryExitData = charts?.today
+    ? [{ name: "Today", entry: charts.today.entry, exit: charts.today.exit }]
+    : [];
 
   // ------------------ LOAD PIE ------------------
   const loadMemberChart = async (filters = {}) => {
@@ -419,14 +422,14 @@ useEffect(() => {
                <h3>Entry vs Exit (Today)</h3>
                <ResponsiveContainer width="100%" height={240}>
                  
-                 <BarChart data={deptBarData}>
+                 <BarChart data={todayEntryExitData}>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis dataKey="department" />
+                    <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="students" fill="#7b2cbf" />
-                    <Bar dataKey="teachers" fill="#9d4edd" />
+                    <Bar dataKey="entry" fill="#7b2cbf" />
+                    <Bar dataKey="exit" fill="#9d4edd" />
                   </BarChart>
                </ResponsiveContainer>
              </div>

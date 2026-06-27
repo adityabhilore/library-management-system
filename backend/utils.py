@@ -117,6 +117,8 @@ def get_last_action(user_id):
         SELECT action
         FROM logs
         WHERE user_id=%s
+          AND action IN ('ENTRY', 'EXIT')
+          AND status = 'NORMAL'
         ORDER BY scan_time DESC
         LIMIT 1
     """, (user_id,))
